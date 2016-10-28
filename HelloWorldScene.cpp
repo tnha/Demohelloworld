@@ -64,7 +64,7 @@ bool HelloWorld::init()
 
     // add the label as a child to this layer
     this->addChild(label, 1);
-
+	
     //-------------------------------------------Tạo sprite
 
     auto sprite = Sprite::create("HelloWorld.png");
@@ -117,11 +117,11 @@ bool HelloWorld::init()
 	sprite1->runAction(moveBy1);           
 	//--------------------------------------
 
-/*	auto moveBy2 = MoveBy::create(10, Vec2(400, 100));
+	auto moveBy2 = MoveBy::create(10, Vec2(400, 100));
 	auto fadeTo = FadeTo::create(2.0f, 120.0f);
 	auto mySpawn = Spawn::createWithTwoActions(moveBy, fadeTo);
 
-	sprite1->runAction(mySpawn->reverse());            */
+	sprite1->runAction(mySpawn->reverse());            
 
 
 
@@ -176,8 +176,48 @@ bool HelloWorld::init()
 	
 
 	this->addChild(sprite3, 0);
-	//--------------------------------------------------   
+	//--------------------------------------------------  
+
+	auto sprite = Sprite::create("HelloWorld.png",Rect(0,0,200,200));
+	this->addChild(sprite);
+	// now lets animate the sprite we moved
+	Vector<SpriteFrame*> animFrames;
+	animFrames.reserve(6);
+	animFrames.pushBack(SpriteFrame::create("1.jpg", Rect(0, 0, 200, 200)));
+	animFrames.pushBack(SpriteFrame::create("2.jpg", Rect(0, 0, 200, 200)));
+	animFrames.pushBack(SpriteFrame::create("3.jpg", Rect(0, 0, 200, 200)));
+	animFrames.pushBack(SpriteFrame::create("4.jpg", Rect(0, 0, 200, 200)));
+	animFrames.pushBack(SpriteFrame::create("5.jpg", Rect(0, 0, 200, 200)));
+	animFrames.pushBack(SpriteFrame::create("6.jpg", Rect(0, 0, 200, 200)));
+
+	Animation* animation = Animation::createWithSpriteFrames(animFrames, 1);
+	Animate* animate = Animate::create(animation);
+
+
+	sprite->runAction(RepeatForever::create(animate));  
+
+	// ----------------------------------------------------
+	auto spriteSins = Sprite::create("HelloWorld.png");
+
+	spriteSins->setAnchorPoint(Vec2(0,0));
+
+	// Tạo ra một Action moveBy
+	auto move = MoveBy::create(2, Vec2(200, 200));
+	auto move_back = move->reverse();
+
+	// Khởi tạo BounceIn Ease Action
+	auto moveEaseIn = EaseBounceOut::create(move->clone());
+
+	// Thời gian trễ giữa các Action
+	auto delay = DelayTime::create(1);
+
+	// Khởi tạo Sequence của Action
+	auto seq = Sequence::create(moveEaseIn, delay, move_back, delay->clone(), nullptr);
+
+	// Chạy sequence
+	spriteSins->runAction(RepeatForever::create(seq));
 	
+	this->addChild(spriteSins);
     return true;
 }
 
